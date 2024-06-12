@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
-import { TBooking } from './booking.interface';
+import { TRental } from './rental.interface';
 
-const bookingSchema = new Schema<TBooking>(
+const rentalSchema = new Schema<TRental>(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -35,4 +35,4 @@ const bookingSchema = new Schema<TBooking>(
   },
 );
 
-export const Booking = model<TBooking>('Booking', bookingSchema);
+export const Rental = model<TRental>('Rental', rentalSchema);
