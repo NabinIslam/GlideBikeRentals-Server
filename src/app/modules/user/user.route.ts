@@ -5,6 +5,15 @@ import { userControllers } from './user.controller';
 
 const router = express.Router();
 
-router.get('/me', auth(USER_ROLE.user), userControllers.profile);
+router.get(
+  '/me',
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  userControllers.profile,
+);
+router.put(
+  '/me',
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  userControllers.updateProfile,
+);
 
 export const userRoutes = router;

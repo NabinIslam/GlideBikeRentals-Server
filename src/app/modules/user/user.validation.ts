@@ -42,6 +42,53 @@ const userValidationSchema = z.object({
   }),
 });
 
+const updateUserValidationSchema = z.object({
+  body: z.object({
+    name: z
+      .string({
+        required_error: 'Name is required',
+        invalid_type_error: 'Name must be a string',
+      })
+      .trim()
+      .optional(),
+
+    email: z
+      .string({
+        required_error: 'Email is required',
+        invalid_type_error: 'Email must be a string',
+      })
+      .email({ message: 'Email must be a valid email address' })
+      .toLowerCase()
+      .trim()
+      .optional(),
+    password: z
+      .string({
+        required_error: 'Password is required',
+        invalid_type_error: 'Password must be a string',
+      })
+      .trim()
+      .min(6, { message: 'Password must be at least 6 character' })
+      .optional(),
+    phone: z
+      .string({
+        required_error: 'Phone number is required',
+        invalid_type_error: 'Phone number must be a string',
+      })
+      .trim()
+      .min(11, { message: 'Phone number must be at least 11 digits' })
+      .optional(),
+    address: z
+      .string({
+        required_error: 'address is required',
+        invalid_type_error: 'address must be a string',
+      })
+      .trim()
+      .optional(),
+    role: z.nativeEnum(USER_ROLE).default(USER_ROLE.user).optional(),
+  }),
+});
+
 export const userValidations = {
   userValidationSchema,
+  updateUserValidationSchema,
 };
