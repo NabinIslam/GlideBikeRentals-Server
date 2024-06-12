@@ -47,6 +47,7 @@ const userSchema = new Schema<TUser>(
 userSchema.pre('save', async function (next) {
   const user = this;
 
+  // hashing the password
   user.password = await bcryptjs.hash(user.password, Number(config.salt_round));
 
   next();
