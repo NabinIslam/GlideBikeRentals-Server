@@ -3,17 +3,17 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { userServices } from './user.service';
 
-const handleCreateUser = catchAsync(async (req, res) => {
-  const user = await userServices.userRegister(req.body);
+const profile = catchAsync(async (req, res) => {
+  const result = await userServices.getProfileFromDB(req.user.userId);
 
   return sendResponse(res, {
-    statusCode: httpStatus.OK,
     success: true,
-    message: 'User created successfully',
-    data: user,
+    statusCode: httpStatus.OK,
+    message: 'User profile retrieved successfully',
+    data: result,
   });
 });
 
 export const userControllers = {
-  handleCreateUser,
+  profile,
 };
