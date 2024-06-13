@@ -19,11 +19,11 @@ const rentalSchema = new Schema<TRental>(
     },
     returnTime: {
       type: Date,
-      required: [true, 'Return time is required.'],
+      default: null,
     },
     totalCost: {
       type: Number,
-      required: [true, 'Total cost is required.'],
+      default: 0,
     },
     isReturned: {
       type: Boolean,
