@@ -47,6 +47,82 @@ const createRentalIntoDB = async (
   return rental;
 };
 
+const updateRentalAndBikeAfterReturnIntoDB = async (rentalId: string) => {
+  // checking if rental is available
+  const rental = await Rental.findOne({ _id: rentalId });
+
+  if (!rental)
+    throw new AppError(httpStatus.NOT_FOUND, 'Could not find the rental!');
+
+  const bike = await Bike.findOne({ _id: rental.bikeId });
+
+  if (!bike)
+    throw new AppError(httpStatus.NOT_FOUND, 'Could not find the bike!');
+
+  // updating the bike availability to true
+  const updateBikeAvailability = await Bike.findOneAndUpdate(
+    { _id: rental.bikeId },
+    { isAvailable: true },
+    { new: true },
+  );
+
+  if (!updateBikeAvailability)
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'Could not update the bike availability',
+    );
+
+  // finding the current time
+  const currentTime = new Date();
+  const rentalStartTime = new Date(rental.startTime);
+
+  // finding the duration in milliseconds, in seconds, in minutes, and lastly in hours
+  const rentalDurationInMilliseconds: number =
+    currentTime.getTime() - rentalStartTime.getTime();
+  const rentalDurationInSeconds: number = Math.floor(
+    rentalDurationInMilliseconds / 1000,
+  );
+  const rentalDurationInMinutes: number = Math.floor(
+    rentalDurationInSeconds / 60,
+  );
+  const rentalDurationInHours: number = Math.floor(
+    rentalDurationInMinutes / 60,
+  );
+
+  const bikePricePerHour: number = bike.pricePerHour;
+
+  //calculating the total cost
+  const totalCost = rentalDurationInHours * bikePricePerHour;
+
+  const updatedRentalData = {
+    returnTime: currentTime.toJSON(),
+    totalCost,
+    isReturned: true,
+  };
+
+  const updatedRental = await Rental.findByIdAndUpdate(
+    { _id: rental._id },
+    updatedRentalData,
+    { new: true },
+  );
+
+  if (!updatedRental)
+    throw new AppError(httpStatus.BAD_REQUEST, 'Could not update the rental');
+
+  return updatedRental;
+};
+
+const getAllRentalsFromDB = async () => {
+  const rentals = await Rental.find();
+
+  if (!rentals)
+    throw new AppError(httpStatus.NOT_FOUND, 'Could not find the rentals');
+
+  return rentals;
+};
+
 export const rentalServices = {
   createRentalIntoDB,
+  updateRentalAndBikeAfterReturnIntoDB,
+  getAllRentalsFromDB,
 };

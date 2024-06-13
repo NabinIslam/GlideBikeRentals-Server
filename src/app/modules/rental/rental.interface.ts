@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Types } from 'mongoose';
 
 export type TRental = {
@@ -8,3 +9,10 @@ export type TRental = {
   totalCost: number;
   isReturned: boolean;
 };
+
+export interface CustomDate extends Date {
+  expires: Date;
+  max: Date;
+  min: Date;
+  defaultOptions: any; // Define the type of defaultOptions accordingly
+}
