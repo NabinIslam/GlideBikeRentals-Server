@@ -3,6 +3,7 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { rentalServices } from './rental.service';
 
+
 const createRental = catchAsync(async (req, res) => {
   const result = await rentalServices.createRentalIntoDB(
     req.body,
@@ -32,6 +33,13 @@ const returnBike = catchAsync(async (req, res) => {
 
 const getAllRentals = catchAsync(async (req, res) => {
   const result = await rentalServices.getAllRentalsFromDB();
+
+  if (result.length === 0)
+    return sendResponse(res, {
+      success: false,
+      message: 'No data found',
+      data: result,
+    });
 
   return sendResponse(res, {
     success: true,

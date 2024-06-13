@@ -5,13 +5,13 @@ import { authServices } from './auth.service';
 import config from '../../config';
 
 const signup = catchAsync(async (req, res) => {
-  const user = await authServices.signupUserIntoDB(req.body);
+  const result = await authServices.signupUserIntoDB(req.body);
 
   return sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
     message: 'User registered successfully',
-    data: user,
+    data: result,
   });
 });
 
@@ -25,7 +25,7 @@ const login = catchAsync(async (req, res) => {
     httpOnly: true,
   });
 
-  sendResponse(res, {
+  return sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'User logged in successfully',
@@ -39,7 +39,7 @@ const refreshToken = catchAsync(async (req, res) => {
 
   const result = await authServices.refreshToken(refreshToken);
 
-  sendResponse(res, {
+  return sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Access token retrieved successfully!',

@@ -18,10 +18,6 @@ app.use(globalErrorHandler);
 
 app.use(notFound);
 
-// app.use((err: any, req: Request, res: Response) =>
-//   errorResponse(res, { statusCode: err.status, message: err.message }),
-// );
-
 app.get('/', (req: Request, res: Response) =>
   res.send(`Server is running fine!`),
 );
