@@ -9,13 +9,17 @@ const router = express.Router();
 
 router.post(
   '/',
-  auth(USER_ROLE.user),
+  auth(USER_ROLE.user, USER_ROLE.admin),
   validateRequest(rentalValidations.createRentalValidationSchema),
   rentalControllers.createRental,
 );
 
 router.put('/:id/return', auth(USER_ROLE.admin), rentalControllers.returnBike);
 
-router.get('/', auth(USER_ROLE.user), rentalControllers.getAllRentals);
+router.get(
+  '/',
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  rentalControllers.getAllRentals,
+);
 
 export const rentalRoutes = router;

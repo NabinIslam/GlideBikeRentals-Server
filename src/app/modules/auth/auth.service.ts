@@ -28,7 +28,10 @@ const signupUserIntoDB = async (payload: TUser) => {
 };
 
 const loginUserFromDB = async (payload: TLoginUser) => {
-  // finding the user
+  let accessToken;
+  let refreshToken;
+
+  // finding the user with the password field
   const foundedUser = await User.findOne({ email: payload.email }).select(
     '+password',
   );
@@ -41,33 +44,33 @@ const loginUserFromDB = async (payload: TLoginUser) => {
     foundedUser.password,
   );
 
-  if (!passwordMatch) {
+  if (!passwordMatch)
     throw new AppError(httpStatus.BAD_REQUEST, 'Password does not match');
-  } else {
-    const user = await User.findOne({ _id: foundedUser._id });
 
-    if (user) {
-      const jwtPayload = {
-        userId: user._id,
-        role: user.role,
-      };
+  // finding the user without the password field
+  const user = await User.findOne({ _id: foundedUser._id });
 
-      // generating access token
-      const accessToken = createToken(
-        jwtPayload,
-        config.jwt_access_secret as string,
-        config.jwt_access_expires_in as string,
-      );
+  if (user) {
+    const jwtPayload = {
+      userId: user._id,
+      role: user.role,
+    };
 
-      // generating refresh token
-      const refreshToken = createToken(
-        jwtPayload,
-        config.jwt_refresh_secret as string,
-        config.jwt_refresh_expires_in as string,
-      );
-      return { user, accessToken, refreshToken };
-    }
+    // generating access token
+    accessToken = createToken(
+      jwtPayload,
+      config.jwt_access_secret as string,
+      config.jwt_access_expires_in as string,
+    );
+
+    // generating refresh token
+    refreshToken = createToken(
+      jwtPayload,
+      config.jwt_refresh_secret as string,
+      config.jwt_refresh_expires_in as string,
+    );
   }
+  return { user, accessToken, refreshToken };
 };
 
 const refreshToken = async (token: string) => {

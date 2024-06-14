@@ -10,7 +10,7 @@ const createRentalIntoDB = async (
 ) => {
   // checking if the rental is already exists
   const alreadyExists = await Rental.findOne({
-    $and: [{ userId }, { bikeId: payload.bikeId }],
+    $and: [{ bikeId: payload.bikeId }, { isReturned: false }],
   });
 
   if (alreadyExists)
