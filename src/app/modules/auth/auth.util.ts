@@ -1,5 +1,6 @@
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { TJwtPayload } from './auth.interface';
 
 export const isPasswordMatched = async (
   plainPassword: string,
@@ -10,7 +11,7 @@ export const isPasswordMatched = async (
 };
 
 export const createToken = (
-  jwtPayload: { userId: string; role: string },
+  jwtPayload: TJwtPayload,
   secret: string,
   expiresIn: string,
 ) => {

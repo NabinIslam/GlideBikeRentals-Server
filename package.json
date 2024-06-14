@@ -1,5 +1,5 @@
 {
-  "name": "express-typescript-practice",
+  "name": "glide-bike-rentals-server",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {

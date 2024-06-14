@@ -17,50 +17,57 @@ const signupUserIntoDB = async (payload: TUser) => {
       'This user is already registered',
     );
 
-  const user = await User.create(payload);
+  const createdUser = await User.create(payload);
 
-  if (!user) {
+  if (!createdUser)
     throw new AppError(httpStatus.BAD_REQUEST, 'Could not create the user');
-  }
+
+  const user = await User.findOne({ _id: createdUser._id });
 
   return user;
 };
 
 const loginUserFromDB = async (payload: TLoginUser) => {
   // finding the user
-  const user = await User.findOne({ email: payload.email }).select('+password');
+  const foundedUser = await User.findOne({ email: payload.email }).select(
+    '+password',
+  );
 
-  if (!user) throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
+  if (!foundedUser) throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
 
   // checking if the password is matching or not
   const passwordMatch = await isPasswordMatched(
     payload.password,
-    user.password,
+    foundedUser.password,
   );
 
-  if (!passwordMatch)
+  if (!passwordMatch) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Password does not match');
+  } else {
+    const user = await User.findOne({ _id: foundedUser._id });
 
-  const jwtPayload = {
-    userId: user.id,
-    role: user.role,
-  };
+    if (user) {
+      const jwtPayload = {
+        userId: user._id,
+        role: user.role,
+      };
 
-  // generating access token
-  const accessToken = createToken(
-    jwtPayload,
-    config.jwt_access_secret as string,
-    config.jwt_access_expires_in as string,
-  );
+      // generating access token
+      const accessToken = createToken(
+        jwtPayload,
+        config.jwt_access_secret as string,
+        config.jwt_access_expires_in as string,
+      );
 
-  // generating refresh token
-  const refreshToken = createToken(
-    jwtPayload,
-    config.jwt_refresh_secret as string,
-    config.jwt_refresh_expires_in as string,
-  );
-
-  return { user, accessToken, refreshToken };
+      // generating refresh token
+      const refreshToken = createToken(
+        jwtPayload,
+        config.jwt_refresh_secret as string,
+        config.jwt_refresh_expires_in as string,
+      );
+      return { user, accessToken, refreshToken };
+    }
+  }
 };
 
 const refreshToken = async (token: string) => {
