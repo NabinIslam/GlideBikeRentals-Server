@@ -32,7 +32,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
     }
 
     if (requiredRoles && !requiredRoles.includes(role))
-      res.status(httpStatus.UNAUTHORIZED).json({
+      return res.status(httpStatus.UNAUTHORIZED).json({
         success: false,
         statusCode: httpStatus.UNAUTHORIZED,
         message: 'You have no access to this route',
