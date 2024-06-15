@@ -76,3 +76,77 @@ To run this project, you will need to add the following environment variables to
 
 `JWT_REFRESH_EXPIRES_IN` 30d 
 
+
+## API Reference
+
+#### Sign up
+
+```http
+  post /api/auth/signup
+```
+
+#### Login
+
+```http
+  POST /api/auth/login
+```
+
+#### Refresh Token
+
+```http
+  POST /api/auth/refresh-token
+```
+
+#### Get Profile
+
+```http
+  GET /api/users/me
+```
+
+#### Update Profile
+
+```http
+  PUT /api/users/me
+```
+
+#### Create Bike
+
+```http
+  POST /api/bikes
+```
+
+#### Get All Bikes
+
+```http
+  GET /api/bikes
+```
+
+#### Update Bike
+
+```http
+  PUT /api/bikes/{id}
+```
+
+#### Delete a Bike
+
+```http
+  DELETE /api/bikes/{id}
+```
+
+#### Create Rental
+
+```http
+  POST /api/rentals
+```
+
+#### Return Bike
+
+```http
+  PUT /api/rentals/{id}/return
+```
+
+#### Get All Rentals
+
+```http
+  GET /api/rentals
+```
