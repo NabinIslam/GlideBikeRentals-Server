@@ -8,7 +8,7 @@ User:
 - can sign up as admin by adding "role": "admin"
 - can login with email and password
 - after login will get a token
-- can get and update the profile information's by authorization with the token
+- can get and update the profile informations by authorization with the token
 
 
 Bike:
@@ -40,7 +40,7 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd GlideBikeRentals-Server
+  cd my-project
 ```
 
 Install dependencies
